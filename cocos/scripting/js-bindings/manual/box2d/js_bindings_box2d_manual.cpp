@@ -814,6 +814,33 @@ jsval array_of_b2Vec2_to_jsval(JSContext* cx, const std::vector<b2Vec2>& vs)
     return OBJECT_TO_JSVAL(jsret);
 }
 
+jsval b2AABB_to_jsval(JSContext* cx, const b2AABB& v)
+{
+    JS::RootedObject object(cx, JS_NewObject(cx, NULL, JS::NullPtr(), JS::NullPtr()));
+    if (!object) {
+        return JSVAL_VOID;
+    }
+    
+    JS::RootedObject lowerBound(cx, JS_NewObject(cx, NULL, JS::NullPtr(), JS::NullPtr()));
+    if (!JS_DefineProperty(cx, lowerBound, "x", v.lowerBound.x, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+        !JS_DefineProperty(cx, lowerBound, "y", v.lowerBound.y, JSPROP_ENUMERATE | JSPROP_PERMANENT) ) {
+        return JSVAL_VOID;
+    }
+    
+    JS::RootedObject upperBound(cx, JS_NewObject(cx, NULL, JS::NullPtr(), JS::NullPtr()));
+    if (!JS_DefineProperty(cx, upperBound, "x", v.upperBound.x, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+        !JS_DefineProperty(cx, upperBound, "y", v.upperBound.y, JSPROP_ENUMERATE | JSPROP_PERMANENT) ) {
+        return JSVAL_VOID;
+    }
+    
+    if (!JS_DefineProperty(cx, object, "lowerBound", lowerBound, JSPROP_ENUMERATE | JSPROP_PERMANENT) ||
+        !JS_DefineProperty(cx, object, "upperBound", upperBound, JSPROP_ENUMERATE | JSPROP_PERMANENT) ) {
+        return JSVAL_VOID;
+    }
+    
+    return OBJECT_TO_JSVAL(object);
+}
+
 
 extern JSClass  *jsb_b2Shape_class;
 extern JSObject *jsb_b2Shape_prototype;
@@ -954,6 +981,11 @@ bool js_box2dclasses_b2World_CreateJoint(JSContext *cx, uint32_t argc, jsval *vp
         
         JS::RootedValue jsret(cx);
         if (ret) {
+            // box2d will reuse cached memory, need first remove old proxy when create new jsobject
+            auto retProxy = jsb_get_native_proxy(ret);
+            if (retProxy) {
+                jsb_remove_proxy(retProxy);
+            }
             jsret = OBJECT_TO_JSVAL(js_get_or_create_jsobject<b2Joint>(cx, (b2Joint*)ret));
         } else {
             jsret = JSVAL_NULL;
@@ -980,6 +1012,11 @@ bool js_box2dclasses_b2World_CreateBody(JSContext *cx, uint32_t argc, jsval *vp)
         b2Body* ret = cobj->CreateBody(arg0);
         JS::RootedValue jsret(cx);
         if (ret) {
+            // box2d will reuse cached memory, need first remove old proxy when create new jsobject
+            auto retProxy = jsb_get_native_proxy(ret);
+            if (retProxy) {
+                jsb_remove_proxy(retProxy);
+            }
             jsret = OBJECT_TO_JSVAL(js_get_or_create_jsobject<b2Body>(cx, (b2Body*)ret));
         } else {
             jsret = JSVAL_NULL;
@@ -1023,6 +1060,11 @@ bool js_box2dclasses_b2Body_CreateFixture(JSContext *cx, uint32_t argc, jsval *v
             b2Fixture* ret = cobj->CreateFixture(arg0, arg1);
             jsval jsret = JSVAL_NULL;
             if (ret) {
+                // box2d will reuse cached memory, need first remove old proxy when create new jsobject
+                auto retProxy = jsb_get_native_proxy(ret);
+                if (retProxy) {
+                    jsb_remove_proxy(retProxy);
+                }
                 jsret = OBJECT_TO_JSVAL(js_get_or_create_jsobject<b2Fixture>(cx, (b2Fixture*)ret));
             } else {
                 jsret = JSVAL_NULL;
@@ -1082,6 +1124,55 @@ bool js_box2dclasses_b2PolygonShape_Set(JSContext *cx, uint32_t argc, jsval *vp)
     }
     
     JS_ReportError(cx, "js_box2dclasses_b2PolygonShape_Set : wrong number of arguments: %d, was expecting %d", argc, 2);
+    return false;
+}
+bool js_box2dclasses_b2PolygonShape_SetAsBox(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    b2PolygonShape* cobj = nullptr;
+    
+    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
+    JS::RootedObject obj(cx);
+    obj.set(args.thisv().toObjectOrNull());
+    js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    cobj = (b2PolygonShape *)(proxy ? proxy->ptr : nullptr);
+    JSB_PRECONDITION2( cobj, cx, false, "js_box2dclasses_b2PolygonShape_SetAsBox : Invalid Native Object");
+    do {
+        bool ok = true;
+        if (argc == 4) {
+            double arg0 = 0;
+            ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
+            if (!ok) { ok = true; break; }
+            double arg1 = 0;
+            ok &= JS::ToNumber( cx, args.get(1), &arg1) && !std::isnan(arg1);
+            if (!ok) { ok = true; break; }
+            b2Vec2 arg2;
+            ok &= jsval_to_b2Vec2(cx, args.get(2), &arg2);
+            if (!ok) { ok = true; break; }
+            double arg3 = 0;
+            ok &= JS::ToNumber( cx, args.get(3), &arg3) && !std::isnan(arg3);
+            if (!ok) { ok = true; break; }
+            cobj->SetAsBox(arg0, arg1, arg2, arg3);
+            args.rval().setUndefined();
+            return true;
+        }
+    } while(0);
+    
+    do {
+        bool ok = true;
+        if (argc == 2) {
+            double arg0 = 0;
+            ok &= JS::ToNumber( cx, args.get(0), &arg0) && !std::isnan(arg0);
+            if (!ok) { ok = true; break; }
+            double arg1 = 0;
+            ok &= JS::ToNumber( cx, args.get(1), &arg1) && !std::isnan(arg1);
+            if (!ok) { ok = true; break; }
+            cobj->SetAsBox(arg0, arg1);
+            args.rval().setUndefined();
+            return true;
+        }
+    } while(0);
+    
+    JS_ReportError(cx, "js_box2dclasses_b2PolygonShape_SetAsBox : wrong number of arguments");
     return false;
 }
 
@@ -1192,7 +1283,6 @@ bool js_box2dclasses_b2ChainShape_CreateLoop(JSContext *cx, uint32_t argc, jsval
     return false;
 }
 
-
 void register_all_box2dclasses_manual(JSContext* cx, JS::HandleObject obj) {
     JS::RootedObject tmpObj(cx);
     
@@ -1211,6 +1301,7 @@ void register_all_box2dclasses_manual(JSContext* cx, JS::HandleObject obj) {
     
     tmpObj.set(jsb_b2PolygonShape_prototype);
     JS_DefineFunction(cx, tmpObj, "Set", js_box2dclasses_b2PolygonShape_Set, 2, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, tmpObj, "SetAsBox", js_box2dclasses_b2PolygonShape_SetAsBox, 2, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     
     tmpObj.set(jsb_b2ChainShape_prototype);
     JS_DefineFunction(cx, tmpObj, "CreateLoop", js_box2dclasses_b2ChainShape_CreateLoop, 2, JSPROP_ENUMERATE | JSPROP_PERMANENT);

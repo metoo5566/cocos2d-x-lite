@@ -747,6 +747,16 @@ GraphicsNode : function (
 cc.PhysicsDebugDraw = {
 
 /**
+ * @method getDrawer
+ * @return {creator::GraphicsNode}
+ */
+getDrawer : function (
+)
+{
+    return creator::GraphicsNode;
+},
+
+/**
  * @method ClearDraw
  */
 ClearDraw : function (
@@ -769,6 +779,88 @@ node
  * @constructor
  */
 PhysicsDebugDraw : function (
+)
+{
+},
+
+};
+
+/**
+ * @class PhysicsWorldManifoldWrapper
+ */
+cc.PhysicsWorldManifoldWrapper = {
+
+/**
+ * @method getSeparation
+ * @param {int} arg0
+ * @return {float}
+ */
+getSeparation : function (
+int 
+)
+{
+    return 0;
+},
+
+/**
+ * @method getX
+ * @param {int} arg0
+ * @return {float}
+ */
+getX : function (
+int 
+)
+{
+    return 0;
+},
+
+/**
+ * @method getY
+ * @param {int} arg0
+ * @return {float}
+ */
+getY : function (
+int 
+)
+{
+    return 0;
+},
+
+/**
+ * @method getCount
+ * @return {int}
+ */
+getCount : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getNormalY
+ * @return {float}
+ */
+getNormalY : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getNormalX
+ * @return {float}
+ */
+getNormalX : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method PhysicsWorldManifoldWrapper
+ * @constructor
+ */
+PhysicsWorldManifoldWrapper : function (
 )
 {
 },
@@ -809,10 +901,84 @@ b2body
 },
 
 /**
+ * @method getContactManifoldWrapper
+ * @param {b2Contact} arg0
+ * @return {creator::PhysicsManifoldWrapper}
+ */
+getContactManifoldWrapper : function (
+b2contact 
+)
+{
+    return creator::PhysicsManifoldWrapper;
+},
+
+/**
+ * @method getContactWorldManifoldWrapper
+ * @param {b2Contact} arg0
+ * @return {creator::PhysicsWorldManifoldWrapper}
+ */
+getContactWorldManifoldWrapper : function (
+b2contact 
+)
+{
+    return creator::PhysicsWorldManifoldWrapper;
+},
+
+/**
  * @method PhysicsUtils
  * @constructor
  */
 PhysicsUtils : function (
+)
+{
+},
+
+};
+
+/**
+ * @class PhysicsContactImpulse
+ */
+cc.PhysicsContactImpulse = {
+
+/**
+ * @method getCount
+ * @return {int}
+ */
+getCount : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getNormalImpulse
+ * @param {int} arg0
+ * @return {float}
+ */
+getNormalImpulse : function (
+int 
+)
+{
+    return 0;
+},
+
+/**
+ * @method getTangentImpulse
+ * @param {int} arg0
+ * @return {float}
+ */
+getTangentImpulse : function (
+int 
+)
+{
+    return 0;
+},
+
+/**
+ * @method PhysicsContactImpulse
+ * @constructor
+ */
+PhysicsContactImpulse : function (
 )
 {
 },
@@ -830,26 +996,6 @@ cc.PhysicsContactListener = {
  */
 unregisterContactFixture : function (
 b2fixture 
-)
-{
-},
-
-/**
- * @method setEndContact
- * @param {function} arg0
- */
-setEndContact : function (
-func 
-)
-{
-},
-
-/**
- * @method setBeginContact
- * @param {function} arg0
- */
-setBeginContact : function (
-func 
 )
 {
 },
@@ -919,12 +1065,78 @@ getType : function (
 },
 
 /**
+ * @method getFractions
+ * @return {Array}
+ */
+getFractions : function (
+)
+{
+    return new Array();
+},
+
+/**
  * @method PhysicsRayCastCallback
  * @constructor
  * @param {int} arg0
  */
 PhysicsRayCastCallback : function (
 int 
+)
+{
+},
+
+};
+
+/**
+ * @class CameraNode
+ */
+cc.CameraNode = {
+
+/**
+ * @method removeTarget
+ * @param {cc.Node} arg0
+ */
+removeTarget : function (
+node 
+)
+{
+},
+
+/**
+ * @method setTransform
+ * @param {float} arg0
+ * @param {float} arg1
+ * @param {float} arg2
+ * @param {float} arg3
+ * @param {float} arg4
+ * @param {float} arg5
+ */
+setTransform : function (
+float, 
+float, 
+float, 
+float, 
+float, 
+float 
+)
+{
+},
+
+/**
+ * @method addTarget
+ * @param {cc.Node} arg0
+ */
+addTarget : function (
+node 
+)
+{
+},
+
+/**
+ * @method CameraNode
+ * @constructor
+ */
+CameraNode : function (
 )
 {
 },

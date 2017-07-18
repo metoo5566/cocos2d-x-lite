@@ -129,9 +129,9 @@ cc.TMXLayerInfo.ATTRIB_ZLIB = 1 << 3;
 // Point
 cc.p = function (x, y) {
     'use strict';
-    if (x == undefined)
+    if (x === undefined)
         return {x: 0, y: 0};
-    if (y == undefined)
+    if (y === undefined)
         return {x: x.x, y: x.y};
     return {x:x, y:y};
 };
@@ -143,17 +143,16 @@ cc.size = function (w, h) {
 // Rect
 cc.rect = function (x, y, w, h) {
     'use strict';
-    var argLen = arguments.length;
-    if (argLen === 0)
+    if (x === undefined)
         return { x: 0, y: 0, width: 0, height: 0 };
 
-    if (argLen === 1)
+    if (y === undefined)
         return { x: x.x, y: x.y, width: x.width, height: x.height };
 
-    if (argLen === 2)
+    if (w === undefined)
         return { x: x.x, y: x.y, width: y.width, height: y.height };
 
-    if (argLen === 4)
+    if (h !== undefined)
         return { x: x, y: y, width: w, height: h };
 
     throw "unknown argument type";
@@ -699,245 +698,6 @@ for (var i = 0, l = protoHasBlend.length; i < l; i++) {
 
 
 //
-// Ease actions JS API Wrapper
-//
-
-var easeActions = {
-    easeIn : 0,
-    easeOut : 1,
-    easeInOut : 2,
-    easeExponentialIn : 3,
-    easeExponentialOut : 4,
-    easeExponentialInOut : 5,
-    easeSineIn : 6,
-    easeSineOut : 7,
-    easeSineInOut : 8,
-    easeElasticIn : 9,
-    easeElasticOut : 10,
-    easeElasticInOut : 11,
-    easeBounceIn : 12,
-    easeBounceOut : 13,
-    easeBounceInOut : 14,
-    easeBackIn : 15,
-    easeBackOut : 16,
-    easeBackInOut : 17,
-
-    easeBezierAction : 18,
-    easeQuadraticActionIn : 19,
-    easeQuadraticActionOut : 20,
-    easeQuadraticActionInOut : 21,
-    easeQuarticActionIn : 22,
-    easeQuarticActionOut : 23,
-    easeQuarticActionInOut : 24,
-    easeQuinticActionIn : 25,
-    easeQuinticActionOut : 26,
-    easeQuinticActionInOut : 27,
-    easeCircleActionIn : 28,
-    easeCircleActionOut : 29,
-    easeCircleActionInOut : 30,
-    easeCubicActionIn : 31,
-    easeCubicActionOut : 32,
-    easeCubicActionInOut : 33
-};
-
-function templateEaseActions(actionTag) {
-    return function(param, param2, param3, param4) {
-        return {tag: actionTag, param: param, param2: param2, param3: param3, param4: param4};
-    }
-}
-
-for (var a in easeActions) {
-    var actionTag = easeActions[a];
-    cc[a] = templateEaseActions(actionTag);
-}
-
-// Action2d
-cc.action = cc.Action.create;
-cc.speed = cc.Speed.create;
-cc.follow = cc.Follow.create;
-cc.orbitCamera = cc.OrbitCamera.create;
-cc.cardinalSplineTo = cc.CardinalSplineTo.create;
-cc.cardinalSplineBy = cc.CardinalSplineBy.create;
-cc.catmullRomTo = cc.CatmullRomTo.create;
-cc.catmullRomBy = cc.CatmullRomBy.create;
-cc.show = cc.Show.create;
-cc.hide = cc.Hide.create;
-cc.toggleVisibility = cc.ToggleVisibility.create;
-cc.removeSelf = cc.RemoveSelf.create;
-cc.flipX = cc.FlipX.create;
-cc.flipY = cc.FlipY.create;
-// cc.place = cc.Place.create;
-cc.callFunc = cc.CallFunc.create;
-cc.actionInterval = cc.ActionInterval.create;
-cc.sequence = cc.Sequence.create;
-cc.repeat = cc.Repeat.create;
-cc.repeatForever = cc.RepeatForever.create;
-cc.spawn = cc.Spawn.create;
-cc.rotateTo = cc.RotateTo.create;
-cc.rotateBy = cc.RotateBy.create;
-//cc.moveBy = cc.MoveBy.create;
-//cc.moveTo = cc.MoveTo.create;
-cc.skewTo = cc.SkewTo.create;
-cc.skewBy = cc.SkewBy.create;
-//cc.jumpBy = cc.JumpBy.create;
-//cc.jumpTo = cc.JumpTo.create;
-cc.bezierBy = cc.BezierBy.create;
-cc.bezierTo = cc.BezierTo.create;
-cc.scaleTo = cc.ScaleTo.create;
-cc.scaleBy = cc.ScaleBy.create;
-cc.blink = cc.Blink.create;
-cc.fadeTo = cc.FadeTo.create;
-cc.fadeIn = cc.FadeIn.create;
-cc.fadeOut = cc.FadeOut.create;
-cc.tintTo = cc.TintTo.create;
-cc.tintBy = cc.TintBy.create;
-cc.delayTime = cc.DelayTime.create;
-cc.reverseTime = cc.ReverseTime.create;
-cc.animate = cc.Animate.create;
-cc.targetedAction = cc.TargetedAction.create;
-cc.actionTween = cc.ActionTween.create;
-
-cc.Place._create = cc.Place.create;
-cc.place = cc.Place.create = function(posOrX, y){
-    if (undefined === y){
-        return cc.Place._create(posOrX);
-    }else{
-        return cc.Place._create(cc.p(posOrX, y));
-    }
-};
-cc.MoveTo._create = cc.MoveTo.create;
-cc.moveTo = cc.MoveTo.create = function(duration, posOrX, y){
-    if (undefined === y){
-        return cc.MoveTo._create(duration, posOrX);
-    }else{
-        return cc.MoveTo._create(duration, cc.p(posOrX, y));
-    }
-};
-cc.MoveBy._create = cc.MoveBy.create;
-cc.moveBy = cc.MoveBy.create = function(duration, posOrX, y){
-    if (undefined === y){
-        return cc.MoveBy._create(duration, posOrX);
-    }else{
-        return cc.MoveBy._create(duration, cc.p(posOrX, y));
-    }
-};
-cc.JumpTo._create = cc.JumpTo.create;
-cc.jumpTo = cc.JumpTo.create = function(duration, position, y, height, jumps){
-    if (undefined === jumps){
-        jumps = height;
-        height = y;
-        return cc.JumpTo._create(duration, position, height, jumps);
-    }else{
-        return cc.JumpTo._create(duration, cc.p(position, y), height, jumps);
-    }
-};
-cc.JumpBy._create = cc.JumpBy.create;
-cc.jumpBy = cc.JumpBy.create = function(duration, position, y, height, jumps){
-    if (undefined === jumps){
-        jumps = height;
-        height = y;
-        return cc.JumpBy._create(duration, position, height, jumps);
-    }else{
-        return cc.JumpBy._create(duration, cc.p(position, y), height, jumps);
-    }
-};
-
-// Actions3d
-cc.gridAction = cc.GridAction.create;
-cc.grid3DAction = cc.Grid3DAction.create;
-cc.tiledGrid3DAction = cc.TiledGrid3DAction.create;
-cc.stopGrid = cc.StopGrid.create;
-cc.reuseGrid = cc.ReuseGrid.create;
-cc.waves3D = cc.Waves3D.create;
-cc.flipX3D = cc.FlipX3D.create;
-cc.flipY3D = cc.FlipY3D.create;
-cc.lens3D = cc.Lens3D.create;
-cc.ripple3D = cc.Ripple3D.create;
-cc.shaky3D = cc.Shaky3D.create;
-cc.liquid = cc.Liquid.create;
-cc.waves = cc.Waves.create;
-cc.twirl = cc.Twirl.create;
-cc.pageTurn3D = cc.PageTurn3D.create;
-cc.shakyTiles3D = cc.ShakyTiles3D.create;
-cc.shatteredTiles3D = cc.ShatteredTiles3D.create;
-cc.shuffleTiles = cc.ShuffleTiles.create;
-cc.fadeOutTRTiles = cc.FadeOutTRTiles.create;
-cc.fadeOutBLTiles = cc.FadeOutBLTiles.create;
-cc.fadeOutUpTiles = cc.FadeOutUpTiles.create;
-cc.fadeOutDownTiles = cc.FadeOutDownTiles.create;
-cc.turnOffTiles = cc.TurnOffTiles.create;
-cc.wavesTiles3D = cc.WavesTiles3D.create;
-cc.jumpTiles3D = cc.JumpTiles3D.create;
-cc.splitRows = cc.SplitRows.create;
-cc.splitCols = cc.SplitCols.create;
-cc.progressTo = cc.ProgressTo.create;
-cc.progressFromTo = cc.ProgressFromTo.create;
-
-// Speed functions
-cc.Speed.prototype.speed = cc.ActionInterval.prototype.speed = function(speed) {
-//    if (speed < 0) {
-//        cc.warn("cc.ActionInterval#speed : Speed must not be negative");
-//        return;
-//    }
-    var action = this, found = false;
-    while (action.getInnerAction && !found) {
-        if (action instanceof cc.Speed) {
-            found = true;
-        }
-        else {
-            action = action.getInnerAction();
-        }
-    }
-    if (found) {
-        speed = speed * action._getSpeed();
-        action._setSpeed(speed);
-    }
-    else {
-        this._speed(speed);
-    }
-    return this;
-};
-cc.Speed.prototype.setSpeed = cc.ActionInterval.prototype.setSpeed = function(speed) {
-//    if (speed < 0) {
-//        cc.warn("cc.ActionInterval#setSpeed : Speed must not be negative");
-//        return;
-//    }
-    var action = this, found = false;
-    while (action.getInnerAction && !found) {
-        if (action instanceof cc.Speed) {
-            found = true;
-        }
-        else {
-            action = action.getInnerAction();
-        }
-    }
-    if (found) {
-        action._setSpeed(speed);
-    }
-    else {
-        this._speed(speed);
-    }
-};
-cc.Speed.prototype.getSpeed = cc.ActionInterval.prototype.getSpeed = function() {
-    var action = this, found = false;
-    while (action.getInnerAction && !found) {
-        if (action instanceof cc.Speed) {
-            found = true;
-        }
-        else {
-            action = action.getInnerAction();
-        }
-    }
-    if (found) {
-        return action._getSpeed();
-    }
-    else {
-        return 1;
-    }
-};
-
-
-//
 // Node API
 //
 
@@ -1019,11 +779,11 @@ cc.Layer.prototype.isBaked = function() {return false;};
 //
 cc.RenderTexture.prototype._beginWithClear = cc.RenderTexture.prototype.beginWithClear;
 cc.RenderTexture.prototype.beginWithClear = function(r, g, b, a, depthValue, stencilValue) {
-    arguments[0] /= 255;
-    arguments[1] /= 255;
-    arguments[2] /= 255;
-    arguments[3] /= 255;
-    this._beginWithClear.apply(this, arguments);
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    a /= 255;
+    this._beginWithClear(r, g, b, a, depthValue, stencilValue);
 };
 
 
@@ -1075,23 +835,23 @@ _p.unscheduleAllCallbacksForTarget = function (target) {
 _p._schedule = _p.schedule;
 _p.schedule = function (callback, target, interval, repeat, delay, paused, key) {
     var isSelector = false;
-    if(typeof callback !== "function"){
+    if (typeof callback !== "function") {
         var selector = callback;
         isSelector = true;
     }
-    if(isSelector === false){
+    if (isSelector === false) {
         //callback, target, interval, repeat, delay, paused, key
         //callback, target, interval, paused, key
-        if(arguments.length === 4 || arguments.length === 5) {
+        if (repeat !== undefined && (delay === undefined || paused === undefined)) {
             key = delay;
             paused = repeat;
             delay = 0;
             repeat = cc.REPEAT_FOREVER;
         }
-    }else{
+    } else {
         //selector, target, interval, repeat, delay, paused
         //selector, target, interval, paused
-        if(arguments.length === 4){
+        if (repeat !== undefined && delay === undefined) {
             paused = repeat;
             repeat = cc.REPEAT_FOREVER;
             delay = 0;
@@ -1144,21 +904,17 @@ cc.defineGetterSetter(cc.BlendFunc, "ALPHA_NON_PREMULTIPLIED", cc.BlendFunc._alp
 cc.BlendFunc.ADDITIVE;
 cc.defineGetterSetter(cc.BlendFunc, "ADDITIVE", cc.BlendFunc._additive);
 
-cc.GLProgram.prototype.setUniformLocationWithMatrix2fv = function(){
-    var tempArray = Array.prototype.slice.call(arguments);
-    tempArray = Array.prototype.concat.call(tempArray, 2);
-    this.setUniformLocationWithMatrixfvUnion.apply(this, tempArray);
+cc.GLProgram.prototype.setUniformLocationWithMatrix2fv = function (...args) {
+    args = Array.prototype.concat.call(args, 2);
+    this.setUniformLocationWithMatrixfvUnion.apply(this, args);
 };
-
-cc.GLProgram.prototype.setUniformLocationWithMatrix3fv = function(){
-    var tempArray = Array.prototype.slice.call(arguments);
-    tempArray = Array.prototype.concat.call(tempArray, 3);
-    this.setUniformLocationWithMatrixfvUnion.apply(this, tempArray);
+cc.GLProgram.prototype.setUniformLocationWithMatrix3fv = function (...args) {
+    args = Array.prototype.concat.call(args, 3);
+    this.setUniformLocationWithMatrixfvUnion.apply(this, args);
 };
-cc.GLProgram.prototype.setUniformLocationWithMatrix4fv = function(){
-    var tempArray = Array.prototype.slice.call(arguments);
-    tempArray = Array.prototype.concat.call(tempArray, 4);
-    this.setUniformLocationWithMatrixfvUnion.apply(this, tempArray);
+cc.GLProgram.prototype.setUniformLocationWithMatrix4fv = function (...args) {
+    args = Array.prototype.concat.call(args, 4);
+    this.setUniformLocationWithMatrixfvUnion.apply(this, args);
 };
 
 //
