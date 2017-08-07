@@ -34,14 +34,16 @@ class CC_DLL PhysicsAABBQueryCallback : public b2QueryCallback
 {
 public:
     PhysicsAABBQueryCallback();
-    PhysicsAABBQueryCallback(const b2Vec2& p);
+    
+    void init();
+    void init(const b2Vec2& p);
     
     ~PhysicsAABBQueryCallback();
     
     virtual bool ReportFixture(b2Fixture* fixture);
     
     b2Fixture* getFixture();
-    std::vector<b2Fixture*> getFixtures();
+    const std::vector<b2Fixture*> getFixtures() const;
     
 protected:
     b2Vec2 _point;

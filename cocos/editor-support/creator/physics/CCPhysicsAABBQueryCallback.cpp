@@ -9,10 +9,17 @@ PhysicsAABBQueryCallback::PhysicsAABBQueryCallback()
 {
 }
 
-PhysicsAABBQueryCallback::PhysicsAABBQueryCallback(const b2Vec2& p)
-: _isPoint(false)
+void PhysicsAABBQueryCallback::init()
 {
+    _isPoint = false;
+    _fixtures.clear();
+}
+    
+void PhysicsAABBQueryCallback::init(const b2Vec2& p)
+{
+    _isPoint = true;
     _point = p;
+    _fixtures.clear();
 }
 
 PhysicsAABBQueryCallback::~PhysicsAABBQueryCallback()
@@ -44,7 +51,7 @@ b2Fixture* PhysicsAABBQueryCallback::getFixture()
     return _fixtures.size() > 0 ? _fixtures[0] : nullptr;
 }
 
-std::vector<b2Fixture*> PhysicsAABBQueryCallback::getFixtures()
+const std::vector<b2Fixture*> PhysicsAABBQueryCallback::getFixtures() const
 {
     return _fixtures;
 }
