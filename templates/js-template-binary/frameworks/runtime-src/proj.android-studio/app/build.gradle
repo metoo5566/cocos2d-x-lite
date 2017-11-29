@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "org.cocos2dx.hellojavascript"
@@ -30,8 +30,6 @@ android {
                     else {
                         arguments 'NDK_MODULE_PATH=' + module_paths.join(':')
                     }
-
-                    arguments 'NDK_OUT=./obj'
 
                     arguments '-j' + Runtime.runtime.availableProcessors()
                     abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
@@ -120,18 +118,6 @@ android.applicationVariants.all { variant ->
         }
     }
 }
-
-
-task copyNativeLibs(type: Copy) {  
-    from('./obj/local') {
-        include '**/*.so'
-        exclude '**/objs*'
-    }
-    into './libs'
-}  
-tasks.withType(JavaCompile) {  
-    compileTask -> compileTask.dependsOn copyNativeLibs  
-} 
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

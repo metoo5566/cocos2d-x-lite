@@ -690,7 +690,10 @@ void EventDispatcher::removeEventListener(EventListener* listener)
 
     if (isFound)
     {
-        releaseListener(listener);
+        if (_inDispatch > 0)
+            CC_SAFE_RELEASE(listener);
+        else
+            releaseListener(listener);
     }
     else
     {
@@ -833,9 +836,10 @@ void EventDispatcher::dispatchEvent(Event* event)
 
 void EventDispatcher::dispatchCustomEvent(const std::string &eventName, void *optionalUserData)
 {
-    EventCustom ev(eventName);
-    ev.setUserData(optionalUserData);
-    dispatchEvent(&ev);
+    EventCustom* ev = new EventCustom(eventName);
+    ev->setUserData(optionalUserData);
+    dispatchEvent(ev);
+    ev->release();
 }
 
 bool EventDispatcher::hasEventListener(const EventListener::ListenerID& listenerID) const

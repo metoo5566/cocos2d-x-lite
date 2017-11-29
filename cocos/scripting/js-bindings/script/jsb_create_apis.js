@@ -204,15 +204,6 @@ cc.speed = cc.Speed.create = function (action, speed) {
     return new cc.Speed(action, speed);
 };
 
-cc.Follow.prototype._ctor = function (followedNode, rect) {
-    if (followedNode)
-        rect ? this.initWithTarget(followedNode, rect)
-             : this.initWithTarget(followedNode);
-};
-cc.follow = cc.Follow.create = function (followedNode, rect) {
-    return new cc.Follow(followedNode, rect);
-};
-
 cc.CardinalSplineTo.prototype._ctor = cc.CardinalSplineBy.prototype._ctor = function(duration, points, tension) {
     tension !== undefined && this.initWithDuration(duration, points, tension);
 };
@@ -302,8 +293,8 @@ cc.ActionInterval.prototype._ctor = function(d) {
     d !== undefined && this.initWithDuration(d);
 };
 
-cc.Sequence.prototype._ctor = function(...args) {
-    var actions = (args[0] instanceof Array) ? args[0] : args;
+cc.Sequence.prototype._ctor = function(tempArray) {
+    var actions = (tempArray instanceof Array) ? tempArray : arguments;
     var last = actions.length - 1;
     if ((last >= 0) && (actions[last] == null))
         cc.log('parameters should not be ending with null in Javascript');
@@ -318,8 +309,8 @@ cc.Sequence.prototype._ctor = function(...args) {
         this.initWithTwoActions(prev, actions[last]);
     }
 };
-cc.sequence = cc.Sequence.create = function (...args) {
-    var actions = (args[0] instanceof Array) ? args[0] : args;
+cc.sequence = cc.Sequence.create = function (tempArray) {
+    var actions = (tempArray instanceof Array) ? tempArray : arguments;
     var last = actions.length - 1;
     if ((last >= 0) && (actions[last] == null))
         cc.log('parameters should not be ending with null in Javascript');
@@ -352,8 +343,8 @@ cc.repeatForever = cc.RepeatForever.create = function (action) {
     return new cc.RepeatForever(action);
 };
 
-cc.Spawn.prototype._ctor = function (...args) {
-    var actions = (args[0] instanceof Array) ? args[0] : args;
+cc.Spawn.prototype._ctor = function (tempArray) {
+    var actions = (tempArray instanceof Array) ? tempArray : arguments;
     var last = actions.length - 1;
     if ((last >= 0) && (actions[last] == null))
         cc.log('parameters should not be ending with null in Javascript');
@@ -368,8 +359,8 @@ cc.Spawn.prototype._ctor = function (...args) {
         this.initWithTwoActions(prev, actions[last]);
     }
 };
-cc.spawn = cc.Spawn.create = function (...args) {
-    var actions = (args[0] instanceof Array) ? args[0] : args;
+cc.spawn = cc.Spawn.create = function (tempArray) {
+    var actions = (tempArray instanceof Array) ? tempArray : arguments;
     var last = actions.length - 1;
     if ((last >= 0) && (actions[last] == null))
         cc.log('parameters should not be ending with null in Javascript');
